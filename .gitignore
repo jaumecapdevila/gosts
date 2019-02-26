@@ -13,3 +13,6 @@
 
 # Vendors
 /vendor/
+
+# Dist files
+hosts
