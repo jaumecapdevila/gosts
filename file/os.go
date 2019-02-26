@@ -5,8 +5,8 @@ import "os"
 // OSReader implementation
 type OSReader struct{}
 
-func (ior *OSReader) Read(file string) (*os.File, error) {
-	f, err := os.OpenFile(file, os.O_APPEND|os.O_WRONLY, 0755)
+func (ior *OSReader) Read(file string, mode int) (*os.File, error) {
+	f, err := os.OpenFile(file, mode, 0755)
 	return f, err
 }
 

@@ -14,10 +14,12 @@ func main() {
 	var hostsFile string
 	var entry string
 	var address string
+	var remove bool
 
 	flag.StringVar(&hostsFile, "file", "/etc/hosts", "The user hosts file")
 	flag.StringVar(&entry, "entry", "", "Entry to add to the hostsfile")
 	flag.StringVar(&address, "address", "127.0.0.1", "Address for the entry")
+	flag.BoolVar(&remove, "d", false, "Indicate that entry must be removed instead")
 
 	flag.Parse()
 
@@ -29,7 +31,13 @@ func main() {
 		log.Fatal(logger.Context{}, "You must specify a valid entry")
 	}
 
-	f, err := reader.Read(hostsFile)
+	mode := file.ADD
+
+	if remove {
+		mode = file.REMOVE
+	}
+
+	f, err := reader.Read(hostsFile, mode)
 
 	if err != nil {
 		log.Error(logger.Context{}, "Unable to read file")
