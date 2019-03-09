@@ -7,13 +7,10 @@
 
 # Test binary, built with `go test -c`
 *.test
+/tests/hosts
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
 
 # Vendors
 /vendor/
-
-# Dist files
-hosts
-TODO.md
