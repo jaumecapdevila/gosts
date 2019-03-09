@@ -34,6 +34,7 @@ func (h *Operator) Remove(entry string) error {
 		content := scanner.Text()
 		if !strings.Contains(content, entry) {
 			buffer.WriteString(content)
+			buffer.WriteString("\n")
 		}
 	}
 
