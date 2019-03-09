@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"io"
 	"os"
 
@@ -45,7 +44,9 @@ func main() {
 
 	defer f.Close()
 
-	_, err = f.WriteString(fmt.Sprintf(file.FORMAT, entry, address))
+	handler := file.NewHandler(f, log)
+
+	err = handler.Assert(entry, address)
 
 	if err != nil {
 		log.Error(logger.Context{}, "Unable to write to file")

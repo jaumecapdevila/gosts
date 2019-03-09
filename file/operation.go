@@ -11,4 +11,7 @@ const (
 
 	// UPDATE operation flags
 	UPDATE int = os.O_RDWR
+
+	// CHECK operation flags
+	CHECK int = os.O_RDONLY
 )

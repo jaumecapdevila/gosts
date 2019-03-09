@@ -4,5 +4,5 @@ import "os"
 
 // Reader defines contract to read a file
 type Reader interface {
-	Read(string) (*os.File, error)
+	Read(file string, mode int) (*os.File, error)
 }

@@ -6,8 +6,7 @@ import "os"
 type OSReader struct{}
 
 func (ior *OSReader) Read(file string, mode int) (*os.File, error) {
-	f, err := os.OpenFile(file, mode, 0755)
-	return f, err
+	return os.OpenFile(file, mode, 0600)
 }
 
 // NewOSReader creates a new file reader implementation
