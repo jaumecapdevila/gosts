@@ -24,7 +24,7 @@ func main() {
 
 	reader := file.NewOSReader()
 
-	log := logger.New(logger.JSON, []io.Writer{os.Stdout})
+	log := logger.New(logger.TEXT, []io.Writer{os.Stdout})
 
 	if entry == "" {
 		log.Fatal(nil, "You must specify a valid entry")
