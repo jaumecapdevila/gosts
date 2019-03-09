@@ -16,13 +16,13 @@ type YamlLoader struct {
 func (l *YamlLoader) Load(name string) Parameters {
 	contents, err := ioutil.ReadFile(name)
 	if err != nil {
-		l.Logger.Fatal(logger.Context{}, "Unable to read configuarion file")
+		l.Logger.Fatal(nil, "Unable to read configuarion file")
 	}
 
 	var params = Parameters{}
 
 	if err = yaml.Unmarshal(contents, &params); err != nil {
-		l.Logger.Fatal(logger.Context{}, "Error unmarshalling the configuration file")
+		l.Logger.Fatal(nil, "Error unmarshalling the configuration file")
 	}
 
 	return params
