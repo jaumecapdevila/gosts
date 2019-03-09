@@ -6,4 +6,7 @@ const (
 
 	// ErrorLevel indicates a trace is an error
 	ErrorLevel = "error"
+
+	// WarningLevel indicates a trace is an error
+	WarningLevel = "warning"
 )

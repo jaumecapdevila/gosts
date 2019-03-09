@@ -7,6 +7,7 @@ type Logger interface {
 	Info(Context, string)
 	Error(Context, string)
 	Fatal(Context, string)
+	Warning(Context, string)
 }
 
 // New generates and returns a new logger depending the format specified

@@ -31,7 +31,7 @@ func (h *Operator) Assert(entry string, address string) error {
 
 	for scanner.Scan() {
 		if strings.Contains(scanner.Text(), entry) {
-			h.Logger.Info(logger.Context{}, fmt.Sprintf(ExistentEntryError, entry, line))
+			h.Logger.Warning(logger.Context{}, fmt.Sprintf(ExistentEntryError, entry, line))
 			return nil
 		}
 
