@@ -30,7 +30,7 @@ func main() {
 		log.Fatal(logger.Context{}, "You must specify a valid entry")
 	}
 
-	mode := file.ADD
+	mode := file.ASSERT
 
 	if remove {
 		mode = file.REMOVE
@@ -44,14 +44,14 @@ func main() {
 
 	defer f.Close()
 
-	handler := file.NewHandler(f, log)
+	operator := file.NewOperator(f, log)
 
-	err = handler.Assert(entry, address)
+	err = operator.Assert(entry, address)
 
 	if err != nil {
 		log.Error(logger.Context{}, "Unable to write to file")
+		os.Exit(0)
 	}
 
-	os.Exit(0)
-
+	log.Info(logger.Context{}, "Entry added successfully!!!")
 }

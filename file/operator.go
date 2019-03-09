@@ -11,27 +11,27 @@ import (
 
 const (
 	// EntryFormat defines the format for the file entries
-	EntryFormat string = "%s %s"
+	EntryFormat string = "\n%s %s"
 
 	// ExistentEntryError format
-	ExistentEntryError string = "The entry %s already exists on file..."
+	ExistentEntryError string = "The entry '%s' already exists on line '%d'"
 )
 
-// Handler is able to execute read/write operations over a file
-type Handler struct {
+// Operator is able to execute read/write operations over a file
+type Operator struct {
 	File   *os.File
 	Logger logger.Logger
 }
 
 // Assert that the entry is on the file
-func (h *Handler) Assert(entry string, address string) error {
+func (h *Operator) Assert(entry string, address string) error {
 	scanner := bufio.NewScanner(h.File)
 
 	line := 1
 
 	for scanner.Scan() {
 		if strings.Contains(scanner.Text(), entry) {
-			h.Logger.Info(logger.Context{}, fmt.Sprint(ExistentEntryError, entry))
+			h.Logger.Info(logger.Context{}, fmt.Sprintf(ExistentEntryError, entry, line))
 			return nil
 		}
 
@@ -41,6 +41,7 @@ func (h *Handler) Assert(entry string, address string) error {
 	var err error
 
 	if err = scanner.Err(); err != nil {
+		fmt.Println("hello")
 		return err
 	}
 
@@ -53,6 +54,6 @@ func (h *Handler) Assert(entry string, address string) error {
 	return nil
 }
 
-func NewHandler(file *os.File, logger logger.Logger) *Handler {
-	return &Handler{File: file, Logger: logger}
+func NewOperator(file *os.File, logger logger.Logger) *Operator {
+	return &Operator{File: file, Logger: logger}
 }
