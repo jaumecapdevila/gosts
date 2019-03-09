@@ -11,7 +11,7 @@ import (
 
 const (
 	// EntryFormat defines the format for the file entries
-	EntryFormat string = "\n%s %s"
+	EntryFormat string = "%s %s\n"
 
 	// ExistentEntryError format
 	ExistentEntryError string = "The entry '%s' already exists on line '%d'"
