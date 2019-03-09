@@ -27,7 +27,7 @@ func main() {
 	log := logger.New(logger.JSON, []io.Writer{os.Stdout})
 
 	if entry == "" {
-		log.Fatal(logger.Context{}, "You must specify a valid entry")
+		log.Fatal(nil, "You must specify a valid entry")
 	}
 
 	mode := file.ASSERT
@@ -39,7 +39,7 @@ func main() {
 	f, err := reader.Read(hostsFile, mode)
 
 	if err != nil {
-		log.Error(logger.Context{}, "Unable to read file")
+		log.Error(nil, "Unable to read file")
 		os.Exit(0)
 	}
 
@@ -50,9 +50,9 @@ func main() {
 	err = operator.Assert(entry, address)
 
 	if err != nil {
-		log.Error(logger.Context{}, "Unable to write to file")
+		log.Error(nil, "Unable to write to file")
 		os.Exit(0)
 	}
 
-	log.Info(logger.Context{}, "Entry added successfully!!!")
+	log.Info(nil, "Entry added successfully!!!")
 }
