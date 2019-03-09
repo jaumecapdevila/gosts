@@ -2,6 +2,7 @@ package file
 
 import (
 	"bufio"
+	"bytes"
 	"fmt"
 	"os"
 	"strings"
@@ -23,7 +24,41 @@ type Operator struct {
 	Logger logger.Logger
 }
 
-// Assert that the entry is on the file
+// Remove that the entry is on the file
+func (h *Operator) Remove(entry string) error {
+	scanner := bufio.NewScanner(h.File)
+
+	var buffer bytes.Buffer
+
+	for scanner.Scan() {
+		content := scanner.Text()
+		if !strings.Contains(content, entry) {
+			buffer.WriteString(content)
+		}
+	}
+
+	var err error
+
+	if err = scanner.Err(); err != nil {
+		return err
+	}
+
+	if err = h.File.Truncate(0); err != nil {
+		return err
+	}
+
+	if _, err = h.File.Seek(0, 0); err != nil {
+		return err
+	}
+
+	if _, err = h.File.Write(buffer.Bytes()); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// Assert specified entry
 func (h *Operator) Assert(entry string, address string) error {
 	scanner := bufio.NewScanner(h.File)
 

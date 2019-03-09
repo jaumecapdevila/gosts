@@ -47,12 +47,23 @@ func main() {
 
 	operator := file.NewOperator(f, log)
 
-	err = operator.Assert(entry, address)
+	if remove {
+		err = operator.Remove(entry)
 
-	if err != nil {
-		log.Error(nil, "Unable to write to file")
-		os.Exit(0)
+		if err != nil {
+			log.Error(nil, "Unable to remove the specified entry")
+			os.Exit(0)
+		}
+
+		log.Info(nil, "Entry removed successfully!!!")
+	} else {
+		err = operator.Assert(entry, address)
+
+		if err != nil {
+			log.Error(nil, "Unable to add the specified entry")
+			os.Exit(0)
+		}
+
+		log.Info(nil, "Entry added successfully!!!")
 	}
-
-	log.Info(nil, "Entry added successfully!!!")
 }

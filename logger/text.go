@@ -44,6 +44,7 @@ func (me *TextLogger) Warning(context Context, message string) {
 	}).Append(&context)
 
 	me.write(YELLOW, current)
+	os.Exit(0)
 }
 
 // Fatal logs given payload with ERROR level and stops the application
