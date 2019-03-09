@@ -40,6 +40,7 @@ func main() {
 
 	if err != nil {
 		log.Error(logger.Context{}, "Unable to read file")
+		os.Exit(0)
 	}
 
 	defer f.Close()

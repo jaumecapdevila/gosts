@@ -41,7 +41,6 @@ func (h *Operator) Assert(entry string, address string) error {
 	var err error
 
 	if err = scanner.Err(); err != nil {
-		fmt.Println("hello")
 		return err
 	}
 
@@ -54,6 +53,7 @@ func (h *Operator) Assert(entry string, address string) error {
 	return nil
 }
 
+// NewOperator returns a new file operator
 func NewOperator(file *os.File, logger logger.Logger) *Operator {
 	return &Operator{File: file, Logger: logger}
 }

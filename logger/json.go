@@ -30,6 +30,7 @@ func (me *JSONLogger) Error(context Context, message string) {
 	}).Append(&context)
 
 	me.write(current)
+	os.Exit(0)
 }
 
 // Fatal logs given payload with ERROR level and stops the application
