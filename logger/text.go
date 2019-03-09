@@ -71,6 +71,8 @@ func (me *TextLogger) write(color string, data *Context) {
 		buffer.WriteString(fmt.Sprintf(ContextPrintFormat, key, value))
 	}
 
+	buffer.WriteString("\n")
+
 	me.writer.Write(buffer.Bytes())
 }
 
