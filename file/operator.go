@@ -24,6 +24,35 @@ type Operator struct {
 	Logger logger.Logger
 }
 
+// Assert specified entry
+func (h *Operator) Assert(entry string, address string) error {
+	scanner := bufio.NewScanner(h.File)
+
+	line := 1
+
+	for scanner.Scan() {
+		if strings.Contains(scanner.Text(), entry) {
+			return fmt.Errorf(ExistentEntryError, entry, line)
+		}
+
+		line++
+	}
+
+	var err error
+
+	if err = scanner.Err(); err != nil {
+		return err
+	}
+
+	_, err = h.File.WriteString(fmt.Sprintf(EntryFormat, entry, address))
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Remove that the entry is on the file
 func (h *Operator) Remove(entry string) error {
 	scanner := bufio.NewScanner(h.File)
@@ -53,36 +82,6 @@ func (h *Operator) Remove(entry string) error {
 	}
 
 	if _, err = h.File.Write(buffer.Bytes()); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-// Assert specified entry
-func (h *Operator) Assert(entry string, address string) error {
-	scanner := bufio.NewScanner(h.File)
-
-	line := 1
-
-	for scanner.Scan() {
-		if strings.Contains(scanner.Text(), entry) {
-			h.Logger.Warning(logger.Context{}, fmt.Sprintf(ExistentEntryError, entry, line))
-			return nil
-		}
-
-		line++
-	}
-
-	var err error
-
-	if err = scanner.Err(); err != nil {
-		return err
-	}
-
-	_, err = h.File.WriteString(fmt.Sprintf(EntryFormat, entry, address))
-
-	if err != nil {
 		return err
 	}
 
