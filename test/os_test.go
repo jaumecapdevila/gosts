@@ -7,8 +7,6 @@ import (
 	"github.com/jaumecapdevila/gosts/file"
 )
 
-const tmpFile = "/tmp/hosts"
-
 func TestReaderShouldSeeFileContent(t *testing.T) {
 	var err error
 
