@@ -13,9 +13,6 @@ import (
 const (
 	// EntryFormat defines the format for the file entries
 	EntryFormat string = "%s %s\n"
-
-	// ExistentEntryError format
-	ExistentEntryError string = "The entry '%s' already exists on line '%d'"
 )
 
 // Operator is able to execute read/write operations over a file
@@ -32,7 +29,7 @@ func (h *Operator) Assert(entry string, address string) error {
 
 	for scanner.Scan() {
 		if strings.Contains(scanner.Text(), entry) {
-			return fmt.Errorf(ExistentEntryError, entry, line)
+			return NewExistentEntryError(entry, line)
 		}
 
 		line++
@@ -50,17 +47,23 @@ func (h *Operator) Assert(entry string, address string) error {
 		return err
 	}
 
+	if _, err = h.File.Seek(0, 0); err != nil {
+		return err
+	}
+
 	return nil
 }
 
-// Remove that the entry is on the file
+// Remove file entry
 func (h *Operator) Remove(entry string) error {
 	scanner := bufio.NewScanner(h.File)
 
 	var buffer bytes.Buffer
 
 	for scanner.Scan() {
+
 		content := scanner.Text()
+
 		if !strings.Contains(content, entry) {
 			buffer.WriteString(content)
 			buffer.WriteString("\n")
