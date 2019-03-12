@@ -13,12 +13,50 @@ import (
 const (
 	// EntryFormat defines the format for the file entries
 	EntryFormat string = "%s %s\n"
+
+	// EntryFoundMessage defines the message displayed if the entry is found
+	EntryFoundMessage string = "Entry '%s' found on line '%d'"
 )
 
 // Operator is able to execute read/write operations over a file
 type Operator struct {
 	File   *os.File
 	Logger logger.Logger
+}
+
+// Find specified entry
+func (h *Operator) Find(entry Entry) (int, error) {
+	scanner := bufio.NewScanner(h.File)
+
+	line := 1
+
+	for scanner.Scan() {
+		lineContent := scanner.Text()
+
+		if strings.Contains(lineContent, entry.Address) || strings.Contains(lineContent, entry.Domain) {
+			return line, nil
+		}
+
+		line++
+	}
+
+	var err error
+
+	if err = scanner.Err(); err != nil {
+		return 0, err
+	}
+
+	_, err = h.File.WriteString(fmt.Sprintf(EntryFormat, entry.Domain, entry.Address))
+
+	if err != nil {
+		return 0, err
+	}
+
+	if _, err = h.File.Seek(0, 0); err != nil {
+		return 0, err
+	}
+
+	return 0, nil
 }
 
 // Assert specified entry

@@ -10,15 +10,15 @@ import (
 )
 
 func main() {
+	var operation string
 	var hostsFile string
 	var entry string
 	var address string
-	var remove bool
 
 	flag.StringVar(&hostsFile, "file", "/etc/hosts", "The user hosts file")
 	flag.StringVar(&entry, "entry", "", "Entry to add to the hostsfile")
 	flag.StringVar(&address, "address", "127.0.0.1", "Address for the entry")
-	flag.BoolVar(&remove, "d", false, "Indicate that entry must be removed instead")
+	flag.StringVar(&operation, "op", "f", "Indicate the operation")
 
 	flag.Parse()
 
