@@ -4,7 +4,7 @@ import "fmt"
 
 const (
 	existentEntryErrorMessage    string = "The entry '%s' already exists on line '%d'"
-	nonExistingEntryErrorMessage string = "The entry '%s' does not exist..."
+	nonExistingEntryErrorMessage string = "Entry '%s' for address '%s' does not exist..."
 )
 
 // ExistentEntryError definition
@@ -33,8 +33,8 @@ func NewExistentEntryError(entry string, line int) error {
 }
 
 // NewEntryNotFoundError constructor
-func NewEntryNotFoundError(domain string) error {
+func NewEntryNotFoundError(entry *Entry) error {
 	return &EntryNotFoundError{
-		message: fmt.Sprintf(nonExistingEntryErrorMessage, domain),
+		message: fmt.Sprintf(nonExistingEntryErrorMessage, entry.Domain, entry.Address),
 	}
 }

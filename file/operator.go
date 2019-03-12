@@ -12,7 +12,7 @@ import (
 
 const (
 	// EntryFormat defines the format for the file entries
-	EntryFormat string = "%s %s\n"
+	EntryFormat string = "%s %s"
 )
 
 // Operator is able to execute read/write operations over a file
@@ -28,9 +28,7 @@ func (h *Operator) Find(entry *Entry) (int, error) {
 	line := 1
 
 	for scanner.Scan() {
-		lineContent := scanner.Text()
-
-		if strings.Contains(lineContent, entry.Address) || strings.Contains(lineContent, entry.Domain) {
+		if strings.Contains(scanner.Text(), fmt.Sprintf(EntryFormat, entry.Domain, entry.Address)) {
 			return line, nil
 		}
 
@@ -47,7 +45,7 @@ func (h *Operator) Find(entry *Entry) (int, error) {
 		return 0, err
 	}
 
-	return 0, NewEntryNotFoundError(entry.Domain)
+	return 0, NewEntryNotFoundError(entry)
 }
 
 // Create entry on file
@@ -57,7 +55,7 @@ func (h *Operator) Create(entry *Entry) error {
 	line := 1
 
 	for scanner.Scan() {
-		if strings.Contains(scanner.Text(), entry.Domain) {
+		if strings.Contains(scanner.Text(), fmt.Sprintf(EntryFormat, entry.Domain, entry.Address)) {
 			return NewExistentEntryError(entry.Domain, line)
 		}
 

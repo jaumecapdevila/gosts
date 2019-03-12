@@ -55,16 +55,16 @@ func main() {
 		line, err := operator.Find(file.NewEntry(entry, address))
 
 		if err != nil {
-			log.Error(nil, fmt.Sprintf("Entry '%s' not found...", entry))
+			log.Error(nil, err.Error())
 			os.Exit(0)
 		}
 
-		log.Info(nil, fmt.Sprintf("Entry '%s' found on line '%d'", entry, line))
+		log.Info(nil, fmt.Sprintf("Entry '%s' for address '%s' found on line '%d'", entry, address, line))
 	case file.Create:
 		err := operator.Create(file.NewEntry(entry, address))
 
 		if err != nil {
-			log.Error(nil, fmt.Sprintf("Unable to create the entry '%s'...", entry))
+			log.Error(nil, err.Error())
 			os.Exit(0)
 		}
 
@@ -73,7 +73,7 @@ func main() {
 		err := operator.Remove(file.NewEntry(entry, address))
 
 		if err != nil {
-			log.Error(nil, fmt.Sprintf("Unable to remove the entry '%s'...", entry))
+			log.Error(nil, err.Error())
 			os.Exit(0)
 		}
 
