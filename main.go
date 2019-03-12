@@ -60,25 +60,16 @@ func main() {
 		}
 
 		log.Info(nil, fmt.Sprintf("Entry '%s' found on line '%d'", entry, line))
+	case file.Create:
+		err := operator.Create(file.NewEntry(entry, address))
+
+		if err != nil {
+			fmt.Println(err)
+			log.Error(nil, fmt.Sprintf("Unable to create the entry '%s'...", entry))
+			os.Exit(0)
+		}
+
+		log.Info(nil, fmt.Sprintf("Entry '%s' created successfully", entry))
+
 	}
-
-	// if remove {
-	// 	err = operator.Remove(entry)
-
-	// 	if err != nil {
-	// 		log.Error(nil, "Unable to remove the specified entry")
-	// 		os.Exit(0)
-	// 	}
-
-	// 	log.Info(nil, "Entry removed successfully!!!")
-	// } else {
-	// 	err = operator.Assert(entry, address)
-
-	// 	if err != nil {
-	// 		log.Error(nil, "Unable to add the specified entry")
-	// 		os.Exit(0)
-	// 	}
-
-	// 	log.Info(nil, "Entry added successfully!!!")
-	// }
 }

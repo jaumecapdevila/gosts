@@ -7,7 +7,7 @@ type Entry struct {
 }
 
 // NewEntry constructor
-func NewEntry(address string, domain string) *Entry {
+func NewEntry(domain string, address string) *Entry {
 	return &Entry{
 		Address: address,
 		Domain:  domain,
