@@ -6,7 +6,7 @@ import (
 )
 
 // Operation of the file
-type Operation uint8
+type Operation uint
 
 const (
 	// Find entry on file

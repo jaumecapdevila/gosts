@@ -13,9 +13,6 @@ import (
 const (
 	// EntryFormat defines the format for the file entries
 	EntryFormat string = "%s %s\n"
-
-	// EntryFoundMessage defines the message displayed if the entry is found
-	EntryFoundMessage string = "Entry '%s' found on line '%d'"
 )
 
 // Operator is able to execute read/write operations over a file
@@ -24,8 +21,8 @@ type Operator struct {
 	Logger logger.Logger
 }
 
-// Find specified entry
-func (h *Operator) Find(entry Entry) (int, error) {
+// Find entry on file
+func (h *Operator) Find(entry *Entry) (int, error) {
 	scanner := bufio.NewScanner(h.File)
 
 	line := 1
@@ -46,28 +43,22 @@ func (h *Operator) Find(entry Entry) (int, error) {
 		return 0, err
 	}
 
-	_, err = h.File.WriteString(fmt.Sprintf(EntryFormat, entry.Domain, entry.Address))
-
-	if err != nil {
-		return 0, err
-	}
-
 	if _, err = h.File.Seek(0, 0); err != nil {
 		return 0, err
 	}
 
-	return 0, nil
+	return 0, NewEntryNotFoundError(entry.Domain)
 }
 
-// Assert specified entry
-func (h *Operator) Assert(entry string, address string) error {
+// Create entry on file
+func (h *Operator) Create(entry *Entry) error {
 	scanner := bufio.NewScanner(h.File)
 
 	line := 1
 
 	for scanner.Scan() {
-		if strings.Contains(scanner.Text(), entry) {
-			return NewExistentEntryError(entry, line)
+		if strings.Contains(scanner.Text(), entry.Domain) {
+			return NewExistentEntryError(entry.Domain, line)
 		}
 
 		line++
@@ -79,7 +70,7 @@ func (h *Operator) Assert(entry string, address string) error {
 		return err
 	}
 
-	_, err = h.File.WriteString(fmt.Sprintf(EntryFormat, entry, address))
+	_, err = h.File.WriteString(fmt.Sprintf(EntryFormat, entry, entry.Address))
 
 	if err != nil {
 		return err
@@ -93,7 +84,7 @@ func (h *Operator) Assert(entry string, address string) error {
 }
 
 // Remove file entry
-func (h *Operator) Remove(entry string) error {
+func (h *Operator) Remove(entry *Entry) error {
 	scanner := bufio.NewScanner(h.File)
 
 	var buffer bytes.Buffer
@@ -102,7 +93,7 @@ func (h *Operator) Remove(entry string) error {
 
 		content := scanner.Text()
 
-		if !strings.Contains(content, entry) {
+		if !strings.Contains(content, entry.Domain) {
 			buffer.WriteString(content)
 			buffer.WriteString("\n")
 		}

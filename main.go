@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"io"
 	"os"
 
@@ -10,15 +11,15 @@ import (
 )
 
 func main() {
-	var operation string
+	var operation uint
 	var hostsFile string
 	var entry string
 	var address string
 
+	flag.UintVar(&operation, "op", uint(file.Find), "Indicate the operation")
 	flag.StringVar(&hostsFile, "file", "/etc/hosts", "The user hosts file")
 	flag.StringVar(&entry, "entry", "", "Entry to add to the hostsfile")
 	flag.StringVar(&address, "address", "127.0.0.1", "Address for the entry")
-	flag.StringVar(&operation, "op", "f", "Indicate the operation")
 
 	flag.Parse()
 
@@ -30,13 +31,15 @@ func main() {
 		log.Fatal(nil, "You must specify a valid entry")
 	}
 
-	mode := file.ASSERT
+	op := file.Operation(operation)
 
-	if remove {
-		mode = file.REMOVE
+	flag, err := file.GetFlagForOperation(op)
+
+	if err != nil {
+		log.Fatal(nil, "Invalid operation")
 	}
 
-	f, err := reader.Read(hostsFile, mode)
+	f, err := reader.Read(hostsFile, flag)
 
 	if err != nil {
 		log.Error(nil, "Unable to read file")
@@ -47,23 +50,35 @@ func main() {
 
 	operator := file.NewOperator(f, log)
 
-	if remove {
-		err = operator.Remove(entry)
+	switch op {
+	case file.Find:
+		line, err := operator.Find(file.NewEntry(entry, address))
 
 		if err != nil {
-			log.Error(nil, "Unable to remove the specified entry")
+			log.Error(nil, fmt.Sprintf("Entry '%s' not found...", entry))
 			os.Exit(0)
 		}
 
-		log.Info(nil, "Entry removed successfully!!!")
-	} else {
-		err = operator.Assert(entry, address)
-
-		if err != nil {
-			log.Error(nil, "Unable to add the specified entry")
-			os.Exit(0)
-		}
-
-		log.Info(nil, "Entry added successfully!!!")
+		log.Info(nil, fmt.Sprintf("Entry '%s' found on line '%d'", entry, line))
 	}
+
+	// if remove {
+	// 	err = operator.Remove(entry)
+
+	// 	if err != nil {
+	// 		log.Error(nil, "Unable to remove the specified entry")
+	// 		os.Exit(0)
+	// 	}
+
+	// 	log.Info(nil, "Entry removed successfully!!!")
+	// } else {
+	// 	err = operator.Assert(entry, address)
+
+	// 	if err != nil {
+	// 		log.Error(nil, "Unable to add the specified entry")
+	// 		os.Exit(0)
+	// 	}
+
+	// 	log.Info(nil, "Entry added successfully!!!")
+	// }
 }
