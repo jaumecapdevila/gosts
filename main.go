@@ -64,12 +64,20 @@ func main() {
 		err := operator.Create(file.NewEntry(entry, address))
 
 		if err != nil {
-			fmt.Println(err)
 			log.Error(nil, fmt.Sprintf("Unable to create the entry '%s'...", entry))
 			os.Exit(0)
 		}
 
 		log.Info(nil, fmt.Sprintf("Entry '%s' created successfully", entry))
+	case file.Remove:
+		err := operator.Remove(file.NewEntry(entry, address))
+
+		if err != nil {
+			log.Error(nil, fmt.Sprintf("Unable to remove the entry '%s'...", entry))
+			os.Exit(0)
+		}
+
+		log.Info(nil, fmt.Sprintf("Entry '%s' removed successfully", entry))
 
 	}
 }

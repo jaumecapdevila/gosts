@@ -70,7 +70,7 @@ func (h *Operator) Create(entry *Entry) error {
 		return err
 	}
 
-	_, err = h.File.WriteString(fmt.Sprintf(EntryFormat, entry, entry.Address))
+	_, err = h.File.WriteString(fmt.Sprintf(EntryFormat, entry.Domain, entry.Address))
 
 	if err != nil {
 		return err
